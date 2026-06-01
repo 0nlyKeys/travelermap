@@ -1,0 +1,10 @@
+@use '../abstracts/tokens' as t;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+html,
+body {
+  background: t.$color-bg;
+  color: t.$color-text;
+  font-family: t.$font-body;
+}

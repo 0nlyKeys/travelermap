@@ -1,0 +1,290 @@
+@use 'styles/abstracts/tokens' as t;
+@use 'styles/abstracts/mixins' as m;
+
+// 300px (StopsPanel width) + 24px (space-6) + 14px (tab overhang) + 4px gap
+$panel-left: calc(300px + #{t.$space-6} + 18px);
+
+.panel {
+  position: absolute;
+  left: $panel-left;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: t.$z-panel;
+  @include m.glass-panel;
+  width: 260px;
+  border-radius: t.$radius-sm;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn t.$dur-fast t.$ease-out both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.panelHeader {
+  padding: t.$space-4 t.$space-5 12px;
+  border-bottom: 1px solid t.$color-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.panelTitle {
+  @include m.text-mono-caps(9px, 0.25em);
+  color: t.$color-text-dim;
+}
+
+.panelCount {
+  font-family: t.$font-mono;
+  font-size: 10px;
+  color: t.$color-accent;
+  letter-spacing: 0.1em;
+}
+
+.pillsArea {
+  padding: t.$space-3 t.$space-4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$space-2;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 32px;
+  @include m.scrollbar-thin;
+}
+
+.empty {
+  font-family: t.$font-mono;
+  font-size: 10px;
+  color: t.$color-text-dim;
+  letter-spacing: 0.06em;
+  width: 100%;
+  text-align: center;
+  padding: t.$space-2 0;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: t.$space-2;
+  background: rgba(255, 107, 26, 0.08);
+  border: 1px solid rgba(255, 107, 26, 0.25);
+  border-radius: t.$radius-lg;
+  padding: 4px 6px 4px 8px;
+  cursor: pointer;
+  transition: all t.$dur-fast;
+  max-width: 100%;
+
+  &:hover {
+    background: rgba(255, 107, 26, 0.16);
+    border-color: rgba(255, 107, 26, 0.5);
+  }
+}
+
+.pillDot {
+  width: 5px;
+  height: 5px;
+  border-radius: t.$radius-full;
+  background: t.$color-accent;
+  flex-shrink: 0;
+}
+
+.pillName {
+  font-family: t.$font-body;
+  font-size: 12px;
+  color: t.$color-text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+
+.pillDelete {
+  background: transparent;
+  border: none;
+  color: t.$color-text-dim;
+  cursor: pointer;
+  padding: 0 2px;
+  width: 16px;
+  height: 16px;
+  @include m.flex-center;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color t.$dur-fast;
+
+  &:hover { color: t.$color-danger; }
+}
+
+.addFooter {
+  border-top: 1px solid t.$color-border;
+  padding: t.$space-4 t.$space-5;
+  flex-shrink: 0;
+}
+
+.addBtns {
+  display: flex;
+  gap: t.$space-2;
+}
+
+.btnMap {
+  flex: 1;
+  background: rgba(255, 107, 26, 0.1);
+  border: 1px solid rgba(255, 107, 26, 0.35);
+  color: t.$color-accent;
+  padding: 8px 6px;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: t.$radius-sm;
+  transition: all t.$dur-fast;
+
+  &:hover { background: rgba(255, 107, 26, 0.2); }
+}
+
+.btnManual {
+  flex: 1;
+  background: transparent;
+  border: 1px solid t.$color-border;
+  color: t.$color-text-dim;
+  padding: 8px 6px;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: t.$radius-sm;
+  transition: all t.$dur-fast;
+
+  &:hover {
+    border-color: t.$color-text-dim;
+    color: t.$color-text;
+  }
+}
+
+.placingState {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+  align-items: center;
+}
+
+.placingHint {
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: t.$color-accent;
+  text-align: center;
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.formArea {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+}
+
+.input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid t.$color-border;
+  color: t.$color-text;
+  padding: t.$space-2 10px;
+  font-family: t.$font-mono;
+  font-size: 11px;
+  border-radius: t.$radius-sm;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus { border-color: t.$color-accent; }
+  &::placeholder { color: t.$color-text-dim; opacity: 0.6; }
+}
+
+.coordRow {
+  display: flex;
+  gap: t.$space-2;
+
+  .input { flex: 1; min-width: 0; }
+}
+
+.submitBtn {
+  background: t.$color-accent;
+  color: t.$color-bg;
+  border: none;
+  padding: 10px;
+  @include m.text-display(13px, 0.1em);
+  cursor: pointer;
+  border-radius: t.$radius-sm;
+  transition: background t.$dur-fast;
+
+  &:hover { background: t.$color-accent-soft; }
+}
+
+.cancelLink {
+  background: transparent;
+  border: none;
+  color: t.$color-text-dim;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  padding: t.$space-1 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  width: 100%;
+
+  &:hover { color: t.$color-text; }
+}
+
+// ─── Light theme ────────────────────────────────────────────────────────────
+:global([data-theme='light']) .panel {
+  background: rgba(235, 235, 235, 0.95);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .panelHeader {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .panelTitle {
+  color: #555;
+}
+
+:global([data-theme='light']) .pillName {
+  color: #1a1a1a;
+}
+
+:global([data-theme='light']) .addFooter {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .input {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
+
+  &::placeholder { color: #888; opacity: 1; }
+}
+
+:global([data-theme='light']) .btnManual {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #555;
+
+  &:hover { border-color: #555; color: #1a1a1a; }
+}

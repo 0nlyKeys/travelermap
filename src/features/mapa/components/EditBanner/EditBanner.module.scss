@@ -1,0 +1,16 @@
+@use 'styles/abstracts/tokens' as t;
+@use 'styles/abstracts/mixins' as m;
+
+.editBanner {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: t.$z-panel;
+  background: t.$color-accent;
+  color: t.$color-bg;
+  padding: t.$space-2 t.$space-5;
+  @include m.text-mono-caps(10px, 0.2em);
+  border-radius: t.$radius-sm;
+  font-weight: 700;
+}

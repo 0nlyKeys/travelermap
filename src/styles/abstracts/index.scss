@@ -1,0 +1,4 @@
+// Barrel for SCSS abstracts — @use 'styles/abstracts' as a;
+@forward 'tokens';
+@forward 'mixins';
+@forward 'functions';

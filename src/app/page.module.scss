@@ -1,0 +1,28 @@
+@use 'styles/abstracts/tokens' as t;
+@use 'styles/abstracts/mixins' as m;
+
+.main {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 40px;
+  font-family: t.$font-body;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  @include m.text-display(64px, 0.05em);
+  margin: 0;
+}
+
+.tagline {
+  @include m.text-mono-caps(11px, 0.25em);
+  color: t.$color-accent;
+  margin-top: t.$space-2;
+}

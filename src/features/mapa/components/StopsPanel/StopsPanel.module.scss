@@ -1,0 +1,374 @@
+@use 'styles/abstracts/tokens' as t;
+@use 'styles/abstracts/mixins' as m;
+
+.sidePanel {
+  position: absolute;
+  left: t.$space-6;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: t.$z-panel;
+  @include m.glass-panel;
+  width: 300px;
+  border-radius: t.$radius-sm;
+  transition: opacity t.$dur-med;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panelHeader {
+  padding: t.$space-5 t.$space-5 14px;
+  border-bottom: 1px solid t.$color-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panelTitle {
+  @include m.text-mono-caps(9px, 0.25em);
+  color: t.$color-text-dim;
+}
+
+.panelCount {
+  font-family: t.$font-mono;
+  font-size: 10px;
+  color: t.$color-accent;
+  letter-spacing: 0.1em;
+}
+
+.stopsList {
+  display: flex;
+  flex-direction: column;
+  padding: t.$space-3 t.$space-4;
+  overflow-y: auto;
+  flex: 1;
+  @include m.scrollbar-thin;
+}
+
+.stopItem {
+  display: flex;
+  align-items: center;
+  gap: t.$space-3;
+  padding: 10px t.$space-1;
+  opacity: 0.4;
+  transition: all 0.3s;
+  position: relative;
+
+  &.activeStop { opacity: 1; }
+  &.passedStop { opacity: 0.75; }
+  &.editMode { opacity: 1; }
+
+  &.clickable {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.85;
+      .stopMarker { border-color: t.$color-accent; }
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 8.5px;
+    top: 18px;
+    bottom: -2px;
+    width: 1px;
+    background: t.$color-border;
+    z-index: 1;
+  }
+  &:last-child::before { display: none; }
+}
+
+.stopMarker {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid t.$color-text-dim;
+  border-radius: t.$radius-full;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 2;
+  background: t.$color-bg;
+}
+
+.stopItem.activeStop .stopMarker {
+  background: t.$color-accent;
+  border-color: t.$color-accent;
+  box-shadow: 0 0 16px t.$color-accent;
+}
+
+.stopItem.passedStop .stopMarker {
+  background: t.$color-text-dim;
+  border-color: t.$color-text-dim;
+}
+
+.stopInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.stopName {
+  @include m.text-display(19px);
+  line-height: 1.1;
+}
+
+.stopCoords {
+  font-family: t.$font-mono;
+  font-size: 9px;
+  color: t.$color-text-dim;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+.stopNameInput {
+  @include m.text-display(18px);
+  line-height: 1.1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed t.$color-border;
+  color: t.$color-text;
+  width: 100%;
+  padding: 2px 0;
+  outline: none;
+
+  &:focus { border-bottom-color: t.$color-accent; }
+}
+
+.stopDelete {
+  background: transparent;
+  border: 1px solid t.$color-border;
+  color: t.$color-text-dim;
+  width: 24px;
+  height: 24px;
+  border-radius: t.$radius-full;
+  cursor: pointer;
+  @include m.flex-center;
+  font-size: 14px;
+  transition: all t.$dur-fast;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: t.$color-danger;
+    color: t.$color-danger;
+  }
+}
+
+/* EDIT FOOTER */
+.editFooter {
+  border-top: 1px solid t.$color-border;
+  padding: t.$space-4 t.$space-5;
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-3;
+}
+
+.placeOnMapBtn {
+  background: rgba(255, 107, 26, 0.1);
+  border: 1px solid rgba(255, 107, 26, 0.35);
+  color: t.$color-accent;
+  padding: 8px;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: t.$radius-sm;
+  transition: all t.$dur-fast;
+
+  &:hover { background: rgba(255, 107, 26, 0.2); }
+}
+
+.placingState {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+  align-items: center;
+}
+
+.placingHint {
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: t.$color-accent;
+  text-align: center;
+  animation: stopBlink 1.4s ease-in-out infinite;
+
+  span { color: t.$color-accent; }
+}
+
+@keyframes stopBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.cancelPlacing {
+  background: transparent;
+  border: none;
+  color: t.$color-text-dim;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover { color: t.$color-text; }
+}
+
+// ─── POI panel toggle tab ────────────────────────────────────────────────────
+.poiTab {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 52px;
+  background: t.$color-bg-elev;
+  border: 1px solid t.$color-border;
+  border-left: none;
+  border-radius: 0 t.$radius-md t.$radius-md 0;
+  color: t.$color-text-dim;
+  cursor: pointer;
+  @include m.flex-center;
+  font-size: 9px;
+  transition: all t.$dur-fast;
+  padding: 0;
+
+  &:hover {
+    color: t.$color-accent;
+    border-color: rgba(255, 107, 26, 0.35);
+    background: rgba(255, 107, 26, 0.06);
+  }
+}
+
+.poiTabActive {
+  color: t.$color-accent;
+  border-color: rgba(255, 107, 26, 0.4);
+  background: rgba(255, 107, 26, 0.1);
+}
+
+:global([data-theme='light']) .poiTab {
+  background: rgba(235, 235, 235, 0.95);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #888;
+
+  &:hover {
+    color: t.$color-accent;
+    border-color: rgba(255, 107, 26, 0.4);
+    background: rgba(255, 107, 26, 0.08);
+  }
+}
+
+:global([data-theme='light']) .poiTabActive {
+  color: t.$color-accent;
+  background: rgba(255, 107, 26, 0.12);
+}
+
+.editHint {
+  @include m.text-mono-caps(9px, 0.15em);
+  color: t.$color-text-dim;
+  line-height: 1.5;
+
+  span { color: t.$color-accent; }
+}
+
+.coordInputs {
+  display: flex;
+  gap: 6px;
+
+  input {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid t.$color-border;
+    color: t.$color-text;
+    padding: t.$space-2 10px;
+    font-family: t.$font-mono;
+    font-size: 11px;
+    border-radius: t.$radius-sm;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+
+    &:focus { border-color: t.$color-accent; }
+    &::placeholder { color: t.$color-text-dim; opacity: 0.6; }
+  }
+}
+
+.addStopBtn {
+  background: t.$color-accent;
+  color: t.$color-bg;
+  border: none;
+  padding: 10px;
+  @include m.text-display(14px, 0.1em);
+  cursor: pointer;
+  border-radius: t.$radius-sm;
+  transition: background t.$dur-fast;
+
+  &:hover { background: t.$color-accent-soft; }
+}
+
+// ─── Light theme ─────────────────────────────────────────────────────
+:global([data-theme='light']) .sidePanel {
+  background: rgba(235, 235, 235, 0.95);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .panelHeader {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .panelTitle {
+  color: #555;
+}
+
+:global([data-theme='light']) .stopName {
+  color: #1a1a1a;
+}
+
+:global([data-theme='light']) .stopCoords {
+  color: #666;
+}
+
+:global([data-theme='light']) .stopMarker {
+  background: #fff;
+  border-color: #999;
+}
+
+:global([data-theme='light']) .stopItem::before {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+:global([data-theme='light']) .stopDelete {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #666;
+
+  &:hover {
+    border-color: t.$color-danger;
+    color: t.$color-danger;
+  }
+}
+
+:global([data-theme='light']) .editFooter {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme='light']) .editHint {
+  color: #555;
+}
+
+:global([data-theme='light']) .coordInputs input {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
+
+  &::placeholder { color: #888; opacity: 1; }
+}
+
+:global([data-theme='light']) .stopNameInput {
+  color: #1a1a1a;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+}

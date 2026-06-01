@@ -1,0 +1,5 @@
+// Utility functions. Currently slim — grow as needed.
+
+@function rem($px) {
+  @return calc($px / 16) * 1rem;
+}

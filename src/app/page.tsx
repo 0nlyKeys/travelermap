@@ -1,0 +1,17 @@
+import { listarRutas } from '@features/rutas/api/rutas';
+import { RutaList } from '@features/rutas/components/RutaList';
+import styles from './page.module.scss';
+
+export default async function HomePage() {
+  const rutas = await listarRutas();
+
+  return (
+    <main className={styles.main}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>RUTAS</h1>
+        <p className={styles.tagline}>Mapas animados para tus videos</p>
+      </header>
+      <RutaList rutas={rutas} />
+    </main>
+  );
+}

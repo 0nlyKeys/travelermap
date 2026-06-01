@@ -1,0 +1,44 @@
+@use 'tokens' as t;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin glass-panel {
+  background: t.$color-bg-elev;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid t.$color-border;
+}
+
+@mixin text-mono-caps($size: 10px, $tracking: 0.2em) {
+  font-family: t.$font-mono;
+  font-size: $size;
+  letter-spacing: $tracking;
+  text-transform: uppercase;
+}
+
+@mixin text-display($size: 36px, $tracking: 0.06em) {
+  font-family: t.$font-display;
+  font-size: $size;
+  letter-spacing: $tracking;
+  line-height: 1;
+}
+
+@mixin focus-ring {
+  outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px t.$color-accent;
+  }
+}
+
+@mixin scrollbar-thin {
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: t.$color-border;
+    border-radius: t.$radius-sm;
+  }
+}

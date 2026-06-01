@@ -1,0 +1,66 @@
+@use 'styles/abstracts/tokens' as t;
+@use 'styles/abstracts/mixins' as m;
+
+.topActions {
+  position: absolute;
+  top: 110px;
+  right: t.$space-8;
+  z-index: t.$z-actions;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: opacity t.$dur-med;
+}
+
+// Whole stack hidden BUT toggle button still clickable
+.hidden {
+  .actionBtn:not(.toggleUiBtn) {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.actionBtn {
+  @include m.glass-panel;
+  @include m.flex-center;
+  color: t.$color-text;
+  width: 44px;
+  height: 44px;
+  border-radius: t.$radius-full;
+  cursor: pointer;
+  transition: all t.$dur-fast;
+
+  &:hover {
+    border-color: t.$color-accent;
+    color: t.$color-accent;
+  }
+
+  &.active {
+    background: t.$color-accent;
+    border-color: t.$color-accent;
+    color: t.$color-bg;
+  }
+}
+
+.toggleUiBtn {
+  &.dimmed { opacity: 0.2; }
+  &.dimmed:hover { opacity: 1; }
+}
+
+// ─── Light theme ─────────────────────────────────────────────────────
+:global([data-theme='light']) .actionBtn {
+  background: rgba(235, 235, 235, 0.95);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
+
+  &:hover {
+    border-color: t.$color-accent;
+    color: t.$color-accent;
+  }
+
+  &.active {
+    background: t.$color-accent;
+    border-color: t.$color-accent;
+    color: #fff;
+  }
+}
