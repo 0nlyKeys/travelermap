@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Bebas_Neue, Manrope, Space_Mono } from 'next/font/google';
+import { SITE_NAME } from '@features/rutas/lib/seo';
 import '@styles/globals.scss';
 
 // Self-hosted at build time by next/font: no render-blocking request to
@@ -25,23 +26,33 @@ const mono = Space_Mono({
   variable: '--font-mono',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://travelermap.vercel.app';
+
+const siteName = SITE_NAME;
+const homeTitle = 'Rutas en moto por Colombia | Traveler Map';
+const description =
+  'Cada ruta, recorrida en moto y animada en el mapa. Mira por dónde pasamos, dónde paramos y cuántos kilómetros son. Síguela o crea la tuya.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'Ruta App',
-  description: 'Mapas animados para videos de viajes en moto',
+  // `template` le pega la marca a cualquier página hija que entregue un título
+  // suelto. /rutas/[slug] arma el suyo completo y usa `absolute` para saltárselo.
+  title: { default: homeTitle, template: `%s | ${siteName}` },
+  description,
+  applicationName: siteName,
+  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'es_CO',
-    siteName: 'Ruta App',
-    title: 'Ruta App',
-    description: 'Mapas animados para videos de viajes en moto',
+    url: '/',
+    siteName,
+    title: homeTitle,
+    description,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ruta App',
-    description: 'Mapas animados para videos de viajes en moto',
+    title: homeTitle,
+    description,
   },
 };
 

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { listarRutas } from '@features/rutas/api/rutas';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://travelermap.vercel.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const rutas = await listarRutas();

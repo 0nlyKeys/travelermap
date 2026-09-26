@@ -5,7 +5,7 @@ import { ImageResponse } from 'next/og';
 export const runtime = 'edge';
 
 // Inherited by /rutas/[slug] unless that segment defines its own.
-export const alt = 'Ruta App: mapas animados para videos de viajes en moto';
+export const alt = 'Traveler Map: rutas en moto para tus videos';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

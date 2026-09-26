@@ -29,6 +29,13 @@ export interface Ruta {
   paradas: Parada[];
   puntosInteres?: PuntoInteres[];
   metadata?: MetadataRuta;
+  /**
+   * Overrides opcionales de SEO. Si están presentes se usan tal cual, en vez
+   * del texto que genera features/rutas/lib/seo.ts. Sirven para afinar una
+   * ruta puntual sin tocar código.
+   */
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 // Coordenadas como tupla [lat, lng] (formato Leaflet)

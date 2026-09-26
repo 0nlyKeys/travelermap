@@ -1,4 +1,4 @@
-# Ruta App
+# Traveler Map
 
 Aplicación web para visualizar rutas de moto con animación sobre mapas interactivos. Cada ruta es un archivo JSON; agregar un nuevo viaje es tan simple como agregar un archivo.
 
