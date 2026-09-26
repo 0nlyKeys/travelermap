@@ -34,7 +34,9 @@ export function PlaybackControls({
   const nextLevel = ((followCamLevel + 1) % 3) as 0 | 1 | 2;
 
   return (
-    <div className={`${styles.controls} ${hidden ? styles.hidden : ''} ${isPlaying ? styles.playing : ''}`}>
+    <div
+      className={`${styles.controls} ${hidden ? styles.hidden : ''} ${isPlaying ? styles.playing : ''}`}
+    >
       <button
         type="button"
         className={styles.btn}
@@ -67,7 +69,9 @@ export function PlaybackControls({
           <Icon name="target" />
         </button>
         {followCamLevel > 0 && (
-          <span className={`${styles.camBadge} ${followCamLevel === 2 ? styles.camBadgeRuta : ''}`}>
+          <span
+            className={`${styles.camBadge} ${followCamLevel === 2 ? styles.camBadgeRuta : ''}`}
+          >
             {CAM_LABELS[followCamLevel]}
           </span>
         )}

@@ -7,17 +7,13 @@
   right: 0;
   height: 2px;
   z-index: t.$z-progress;
-  background: rgba(255, 255, 255, 0.04);
+  background: t.$border;
 }
 
 .progressFill {
   height: 100%;
-  background: t.$color-accent;
+  background: t.$accent;
   width: 0;
   transition: width 0.1s linear;
-  box-shadow: 0 0 12px t.$color-accent;
-}
-
-:global([data-theme='light']) .progress {
-  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 12px t.$accent;
 }

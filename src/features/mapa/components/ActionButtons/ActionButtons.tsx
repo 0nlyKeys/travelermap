@@ -15,7 +15,14 @@ interface Props {
  * The UI toggle stays partially visible when hideUi is on so the user can
  * bring everything back.
  */
-export function ActionButtons({ editMode, hideUi, lightMap, onToggleEdit, onToggleHideUi, onToggleLightMap }: Props) {
+export function ActionButtons({
+  editMode,
+  hideUi,
+  lightMap,
+  onToggleEdit,
+  onToggleHideUi,
+  onToggleLightMap,
+}: Props) {
   return (
     <div className={`${styles.topActions} ${hideUi ? styles.hidden : ''}`}>
       <button

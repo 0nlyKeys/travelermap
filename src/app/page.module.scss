@@ -1,28 +1,67 @@
 @use 'styles/abstracts/tokens' as t;
 @use 'styles/abstracts/mixins' as m;
 
+// Home. DESIGN_VARIANCE 6 / MOTION_INTENSITY 5 / VISUAL_DENSITY 5.
+// Left-anchored, asymmetric gutter, scrolls. No 100vh centering.
+
 .main {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  gap: 40px;
+  gap: t.$space-16;
+  padding: t.$space-12 clamp(#{t.$space-4}, 6vw, #{t.$space-20}) t.$space-20;
   font-family: t.$font-body;
+
+  @include m.below(t.$bp-md) {
+    gap: t.$space-10;
+    padding: t.$space-8 t.$space-4 t.$space-12;
+  }
 }
 
-.header {
-  text-align: center;
+// ─── Hero ──────────────────────────────────────────────────────────────
+// Two text elements only. Top padding capped well under the 6rem limit so
+// the headline sits near the top instead of floating mid-viewport.
+.hero {
+  padding-top: t.$space-6;
+  max-width: 20ch;
+
+  @include m.below(t.$bp-md) {
+    padding-top: t.$space-2;
+  }
 }
 
 .title {
-  @include m.text-display(64px, 0.05em);
+  @include m.text-display(t.$fs-hero, 0.04em);
   margin: 0;
+  color: t.$text-primary;
 }
 
 .tagline {
-  @include m.text-mono-caps(11px, 0.25em);
-  color: t.$color-accent;
-  margin-top: t.$space-2;
+  @include m.text-mono-caps(t.$fs-label-md, t.$tracking-caps);
+  color: t.$accent;
+  margin-top: t.$space-4;
+  line-height: 1.5;
+}
+
+// ─── Catalog ───────────────────────────────────────────────────────────
+.catalog {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-6;
+}
+
+.rule {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid t.$border;
+  padding-top: t.$space-3;
+}
+
+.count {
+  font-family: t.$font-mono;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-label;
+  text-transform: uppercase;
+  color: t.$text-secondary;
 }

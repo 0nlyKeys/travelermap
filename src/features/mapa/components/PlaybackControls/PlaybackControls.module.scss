@@ -13,7 +13,17 @@
   gap: t.$space-5;
   align-items: center;
   border-radius: t.$radius-md;
-  transition: opacity t.$dur-med;
+  transition: opacity t.$dur-med t.$ease-out;
+
+  @include m.below(t.$bp-md) {
+    left: t.$space-3;
+    right: t.$space-3;
+    bottom: t.$space-3;
+    transform: none;
+    justify-content: center;
+    gap: t.$space-3;
+    padding: t.$space-3 t.$space-4;
+  }
 }
 
 .hidden {
@@ -21,51 +31,66 @@
   pointer-events: none;
 }
 
+// Fades out of the way while recording; any hover or keyboard focus brings
+// it straight back.
 .playing {
   opacity: 0.15;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     opacity: 1;
   }
 }
 
 .btn {
   background: transparent;
-  border: 1px solid t.$color-border;
-  color: t.$color-text;
+  border: 1px solid t.$border;
+  color: t.$text-primary;
   width: 42px;
   height: 42px;
   border-radius: t.$radius-full;
   @include m.flex-center;
+  @include m.transition(border-color, color, background, transform);
+  @include m.focus-ring;
+  @include m.tactile;
   cursor: pointer;
-  transition: all t.$dur-fast;
   flex-shrink: 0;
 
   &:hover {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
-    background: rgba(255, 107, 26, 0.08);
+    border-color: t.$accent;
+    color: t.$accent;
+    background: t.$accent-a08;
   }
 
   &.active {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
-    background: rgba(255, 107, 26, 0.12);
+    border-color: t.$accent;
+    color: t.$accent;
+    background: t.$accent-a12;
+  }
+
+  @include m.below(t.$bp-md) {
+    width: 38px;
+    height: 38px;
   }
 }
 
 .btnPrimary {
-  background: t.$color-accent;
-  border-color: t.$color-accent;
-  color: t.$color-bg;
+  background: t.$accent;
+  border-color: t.$accent;
+  color: t.$accent-contrast;
   width: 52px;
   height: 52px;
 
   &:hover {
-    background: t.$color-accent-soft;
-    border-color: t.$color-accent-soft;
-    color: t.$color-bg;
+    background: t.$accent-soft;
+    border-color: t.$accent-soft;
+    color: t.$accent-contrast;
     transform: scale(1.05);
+  }
+
+  @include m.below(t.$bp-md) {
+    width: 46px;
+    height: 46px;
   }
 }
 
@@ -79,13 +104,13 @@
   top: -15px;
   right: 0;
   left: 0;
-  background: t.$color-accent;
-  color: t.$color-bg;
+  background: t.$accent;
+  color: t.$accent-contrast;
   font-family: t.$font-mono;
   font-size: 7px;
-  font-weight: 700;
+  font-weight: t.$weight-bold;
   text-align: center;
-  letter-spacing: 0.06em;
+  letter-spacing: t.$tracking-wide;
   line-height: 1;
   padding: 2px 4px;
   border-radius: 3px;
@@ -93,16 +118,21 @@
   white-space: nowrap;
 
   &.camBadgeRuta {
-    background: rgba(255, 107, 26, 0.25);
-    color: t.$color-accent;
-    border: 1px solid t.$color-accent;
+    background: t.$accent-a20;
+    color: t.$accent;
+    border: 1px solid t.$accent;
   }
 }
 
 .divider {
   width: 1px;
   height: 32px;
-  background: t.$color-border;
+  background: t.$border;
+  flex-shrink: 0;
+
+  @include m.below(t.$bp-sm) {
+    display: none;
+  }
 }
 
 .speedControl {
@@ -111,33 +141,44 @@
   gap: 6px;
   min-width: 140px;
 
+  @include m.below(t.$bp-md) {
+    min-width: 0;
+    flex: 1;
+  }
+
   input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
     height: 2px;
-    background: t.$color-border;
+    background: t.$border;
     outline: none;
     cursor: pointer;
+    border-radius: t.$radius-sm;
+
+    &:focus-visible {
+      outline: 2px solid t.$accent;
+      outline-offset: 6px;
+    }
 
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 14px;
       height: 14px;
-      background: t.$color-accent;
+      background: t.$accent;
       border-radius: t.$radius-full;
       cursor: pointer;
-      box-shadow: 0 0 8px t.$color-accent;
+      box-shadow: 0 0 8px t.$accent;
     }
 
     &::-moz-range-thumb {
       width: 14px;
       height: 14px;
-      background: t.$color-accent;
+      background: t.$accent;
       border-radius: t.$radius-full;
       cursor: pointer;
       border: none;
-      box-shadow: 0 0 8px t.$color-accent;
+      box-shadow: 0 0 8px t.$accent;
     }
   }
 }
@@ -146,51 +187,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: t.$space-2;
 }
 
 .speedLabel {
-  @include m.text-mono-caps(9px, 0.2em);
-  color: t.$color-text-dim;
+  @include m.text-mono-caps(t.$fs-label-xs, t.$tracking-label);
+  color: t.$text-secondary;
 }
 
 .speedValue {
   font-family: t.$font-mono;
-  font-size: 11px;
-  color: t.$color-accent;
-  font-weight: 700;
-}
-
-// ─── Light theme ─────────────────────────────────────────────────────
-:global([data-theme='light']) .controls {
-  background: rgba(235, 235, 235, 0.95);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .btn {
-  border-color: rgba(0, 0, 0, 0.2);
-  color: #1a1a1a;
-
-  &:hover {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
-    background: rgba(255, 107, 26, 0.08);
-  }
-
-  &.active {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
-    background: rgba(255, 107, 26, 0.12);
-  }
-}
-
-:global([data-theme='light']) .divider {
-  background: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .speedLabel {
-  color: #555;
-}
-
-:global([data-theme='light']) .speedControl input[type='range'] {
-  background: rgba(0, 0, 0, 0.15);
+  font-size: t.$fs-label-md;
+  color: t.$accent;
+  font-weight: t.$weight-bold;
 }

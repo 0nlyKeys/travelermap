@@ -12,11 +12,26 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
   z-index: t.$z-panel;
   @include m.glass-panel;
   width: 260px;
-  border-radius: t.$radius-sm;
+  border-radius: t.$radius-md;
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  animation: slideIn t.$dur-fast t.$ease-out both;
+
+  @include m.motion-safe {
+    animation: slideIn t.$dur-fast t.$ease-out both;
+  }
+
+  // No room for a second rail on a phone: dock under the stops sheet.
+  @include m.below(t.$bp-md) {
+    left: t.$space-3;
+    right: t.$space-3;
+    top: auto;
+    bottom: calc(#{t.$offset-dock-bottom} - 24px);
+    transform: none;
+    width: auto;
+    max-height: 26vh;
+    animation: none;
+  }
 }
 
 @keyframes slideIn {
@@ -32,22 +47,26 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
 
 .panelHeader {
   padding: t.$space-4 t.$space-5 12px;
-  border-bottom: 1px solid t.$color-border;
+  border-bottom: 1px solid t.$border;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
+
+  @include m.below(t.$bp-md) {
+    padding: t.$space-3 t.$space-4;
+  }
 }
 
 .panelTitle {
-  @include m.text-mono-caps(9px, 0.25em);
-  color: t.$color-text-dim;
+  @include m.text-mono-caps(t.$fs-label-xs, t.$tracking-caps);
+  color: t.$text-secondary;
 }
 
 .panelCount {
   font-family: t.$font-mono;
-  font-size: 10px;
-  color: t.$color-accent;
+  font-size: t.$fs-label-sm;
+  color: t.$accent;
   letter-spacing: 0.1em;
 }
 
@@ -64,9 +83,9 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
 
 .empty {
   font-family: t.$font-mono;
-  font-size: 10px;
-  color: t.$color-text-dim;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  color: t.$text-secondary;
+  letter-spacing: t.$tracking-wide;
   width: 100%;
   text-align: center;
   padding: t.$space-2 0;
@@ -76,17 +95,18 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
   display: flex;
   align-items: center;
   gap: t.$space-2;
-  background: rgba(255, 107, 26, 0.08);
-  border: 1px solid rgba(255, 107, 26, 0.25);
+  background: t.$accent-a08;
+  border: 1px solid t.$accent-a20;
   border-radius: t.$radius-lg;
   padding: 4px 6px 4px 8px;
   cursor: pointer;
-  transition: all t.$dur-fast;
+  @include m.transition(background, border-color);
+  @include m.focus-ring;
   max-width: 100%;
 
   &:hover {
-    background: rgba(255, 107, 26, 0.16);
-    border-color: rgba(255, 107, 26, 0.5);
+    background: t.$accent-a12;
+    border-color: t.$accent-a35;
   }
 }
 
@@ -94,24 +114,22 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
   width: 5px;
   height: 5px;
   border-radius: t.$radius-full;
-  background: t.$color-accent;
+  background: t.$accent;
   flex-shrink: 0;
 }
 
 .pillName {
   font-family: t.$font-body;
-  font-size: 12px;
-  color: t.$color-text;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: t.$fs-body-sm;
+  color: t.$text-primary;
+  @include m.truncate;
   max-width: 160px;
 }
 
 .pillDelete {
   background: transparent;
   border: none;
-  color: t.$color-text-dim;
+  color: t.$text-secondary;
   cursor: pointer;
   padding: 0 2px;
   width: 16px;
@@ -120,15 +138,22 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
   font-size: 15px;
   line-height: 1;
   flex-shrink: 0;
-  transition: color t.$dur-fast;
+  @include m.transition(color);
+  @include m.focus-ring;
 
-  &:hover { color: t.$color-danger; }
+  &:hover {
+    color: t.$danger;
+  }
 }
 
 .addFooter {
-  border-top: 1px solid t.$color-border;
+  border-top: 1px solid t.$border;
   padding: t.$space-4 t.$space-5;
   flex-shrink: 0;
+
+  @include m.below(t.$bp-md) {
+    padding: t.$space-3 t.$space-4;
+  }
 }
 
 .addBtns {
@@ -138,36 +163,42 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
 
 .btnMap {
   flex: 1;
-  background: rgba(255, 107, 26, 0.1);
-  border: 1px solid rgba(255, 107, 26, 0.35);
-  color: t.$color-accent;
+  background: t.$accent-a08;
+  border: 1px solid t.$accent-a35;
+  color: t.$accent;
   padding: 8px 6px;
   font-family: t.$font-mono;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-wide;
   cursor: pointer;
   border-radius: t.$radius-sm;
-  transition: all t.$dur-fast;
+  @include m.transition(background, border-color);
+  @include m.focus-ring;
+  @include m.tactile;
 
-  &:hover { background: rgba(255, 107, 26, 0.2); }
+  &:hover {
+    background: t.$accent-a20;
+  }
 }
 
 .btnManual {
   flex: 1;
   background: transparent;
-  border: 1px solid t.$color-border;
-  color: t.$color-text-dim;
+  border: 1px solid t.$border;
+  color: t.$text-secondary;
   padding: 8px 6px;
   font-family: t.$font-mono;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-wide;
   cursor: pointer;
   border-radius: t.$radius-sm;
-  transition: all t.$dur-fast;
+  @include m.transition(border-color, color);
+  @include m.focus-ring;
+  @include m.tactile;
 
   &:hover {
-    border-color: t.$color-text-dim;
-    color: t.$color-text;
+    border-color: t.$border-strong;
+    color: t.$text-primary;
   }
 }
 
@@ -180,17 +211,25 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
 
 .placingHint {
   font-family: t.$font-mono;
-  font-size: 10px;
+  font-size: t.$fs-label-sm;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: t.$color-accent;
+  color: t.$accent;
   text-align: center;
-  animation: blink 1.4s ease-in-out infinite;
+
+  @include m.motion-safe {
+    animation: blink 1.4s ease-in-out infinite;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .formArea {
@@ -200,91 +239,68 @@ $panel-left: calc(300px + #{t.$space-6} + 18px);
 }
 
 .input {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid t.$color-border;
-  color: t.$color-text;
+  background: t.$surface-field;
+  border: 1px solid t.$border;
+  color: t.$text-primary;
   padding: t.$space-2 10px;
   font-family: t.$font-mono;
-  font-size: 11px;
+  font-size: t.$fs-label-md;
   border-radius: t.$radius-sm;
   outline: none;
   width: 100%;
-  box-sizing: border-box;
 
-  &:focus { border-color: t.$color-accent; }
-  &::placeholder { color: t.$color-text-dim; opacity: 0.6; }
+  &:focus,
+  &:focus-visible {
+    border-color: t.$accent;
+  }
+  &::placeholder {
+    color: t.$text-secondary;
+  }
 }
 
 .coordRow {
   display: flex;
   gap: t.$space-2;
 
-  .input { flex: 1; min-width: 0; }
+  .input {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .submitBtn {
-  background: t.$color-accent;
-  color: t.$color-bg;
+  background: t.$accent;
+  color: t.$accent-contrast;
   border: none;
   padding: 10px;
   @include m.text-display(13px, 0.1em);
   cursor: pointer;
   border-radius: t.$radius-sm;
-  transition: background t.$dur-fast;
+  @include m.transition(background);
+  @include m.focus-ring;
+  @include m.tactile;
 
-  &:hover { background: t.$color-accent-soft; }
+  &:hover {
+    background: t.$accent-soft;
+  }
 }
 
 .cancelLink {
   background: transparent;
   border: none;
-  color: t.$color-text-dim;
+  color: t.$text-secondary;
   font-family: t.$font-mono;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-wide;
   cursor: pointer;
   text-align: center;
   padding: t.$space-1 0;
   text-decoration: underline;
   text-underline-offset: 2px;
   width: 100%;
+  @include m.focus-ring;
 
-  &:hover { color: t.$color-text; }
-}
-
-// ─── Light theme ────────────────────────────────────────────────────────────
-:global([data-theme='light']) .panel {
-  background: rgba(235, 235, 235, 0.95);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .panelHeader {
-  border-bottom-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .panelTitle {
-  color: #555;
-}
-
-:global([data-theme='light']) .pillName {
-  color: #1a1a1a;
-}
-
-:global([data-theme='light']) .addFooter {
-  border-top-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .input {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #1a1a1a;
-
-  &::placeholder { color: #888; opacity: 1; }
-}
-
-:global([data-theme='light']) .btnManual {
-  border-color: rgba(0, 0, 0, 0.2);
-  color: #555;
-
-  &:hover { border-color: #555; color: #1a1a1a; }
+  &:hover {
+    color: t.$text-primary;
+  }
 }

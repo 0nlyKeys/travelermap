@@ -1,0 +1,62 @@
+@use '../abstracts/tokens' as t;
+
+// Semantic theme layer. Components read var(--…) through the $surface /
+// $text-primary / $accent aliases in _tokens.scss and never hardcode a
+// light-mode value again.
+//
+// Dark is the default identity (dark-tech cockpit). Light is opt-in via the
+// in-app map toggle, which sets [data-theme='light'] on the map root.
+
+:root {
+  // Surfaces
+  --surface: #{t.$color-bg};
+  --surface-sunken: #{t.$color-bg-darker};
+  --surface-panel: #{t.$color-bg-elev};
+  --surface-scrim: rgba(5, 5, 5, 0.85);
+  --surface-field: rgba(0, 0, 0, 0.4);
+
+  // Text
+  --text-primary: #{t.$color-text};
+  --text-secondary: #{t.$color-text-dim};
+
+  // Lines
+  --border: #{t.$color-border};
+  --border-strong: rgba(255, 255, 255, 0.2);
+
+  // Accent. Identical in both themes — this is the brand.
+  --accent: #{t.$color-accent};
+  --accent-soft: #{t.$color-accent-soft};
+  --accent-a08: rgba(255, 107, 26, 0.08);
+  --accent-a12: rgba(255, 107, 26, 0.12);
+  --accent-a20: rgba(255, 107, 26, 0.2);
+  --accent-a35: rgba(255, 107, 26, 0.35);
+  // Near-black on orange = 6.07:1. White on orange would be 2.85:1 (AA fail),
+  // so the contrast pairing is the same in both themes.
+  --accent-contrast: #{t.$color-bg};
+
+  --danger: #{t.$color-danger};
+
+  // Halo behind the big stop overlay, so display type stays legible over
+  // whatever tiles are underneath it.
+  --overlay-halo: rgba(0, 0, 0, 0.8);
+
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --surface: #{t.$color-bg-light};
+  --surface-sunken: #{t.$color-bg-darker-light};
+  --surface-panel: #{t.$color-bg-elev-light};
+  --surface-scrim: rgba(235, 235, 235, 0.92);
+  --surface-field: rgba(255, 255, 255, 0.7);
+
+  --text-primary: #{t.$color-text-light};
+  --text-secondary: #{t.$color-text-dim-light};
+
+  --border: #{t.$color-border-light};
+  --border-strong: rgba(0, 0, 0, 0.2);
+
+  --overlay-halo: rgba(255, 255, 255, 0.75);
+
+  color-scheme: light;
+}

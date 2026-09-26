@@ -7,11 +7,19 @@ export default async function HomePage() {
 
   return (
     <main className={styles.main}>
-      <header className={styles.header}>
+      <header className={styles.hero}>
         <h1 className={styles.title}>RUTAS</h1>
         <p className={styles.tagline}>Mapas animados para tus videos</p>
       </header>
-      <RutaList rutas={rutas} />
+
+      <section className={styles.catalog} aria-label="Rutas disponibles">
+        <div className={styles.rule}>
+          <span className={styles.count}>
+            {rutas.length} {rutas.length === 1 ? 'disponible' : 'disponibles'}
+          </span>
+        </div>
+        <RutaList rutas={rutas} />
+      </section>
     </main>
   );
 }

@@ -10,23 +10,22 @@
   text-align: center;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity 0.5s t.$ease-out;
+  width: min(90%, 900px);
 
-  &.show { opacity: 1; }
+  &.show {
+    opacity: 1;
+  }
 }
 
 .currentStopLabel {
-  @include m.text-mono-caps(10px, 0.3em);
-  color: t.$color-accent;
+  @include m.text-mono-caps(t.$fs-label-sm, 0.3em);
+  color: t.$accent;
   margin-bottom: t.$space-2;
 }
 
 .currentStopName {
-  @include m.text-display(80px);
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
-}
-
-:global([data-theme='light']) .currentStopName {
-  color: #1a1a1a;
-  text-shadow: 0 4px 24px rgba(255, 255, 255, 0.6);
+  @include m.text-display(t.$fs-overlay, t.$tracking-wide);
+  color: t.$text-primary;
+  text-shadow: 0 4px 24px var(--overlay-halo);
 }

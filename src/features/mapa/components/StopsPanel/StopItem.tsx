@@ -38,7 +38,13 @@ export function StopItem({
       onClick={!editMode && onFlyTo ? () => onFlyTo(index) : undefined}
       role={!editMode && onFlyTo ? 'button' : undefined}
       tabIndex={!editMode && onFlyTo ? 0 : undefined}
-      onKeyDown={!editMode && onFlyTo ? (e) => { if (e.key === 'Enter') onFlyTo(index); } : undefined}
+      onKeyDown={
+        !editMode && onFlyTo
+          ? (e) => {
+              if (e.key === 'Enter') onFlyTo(index);
+            }
+          : undefined
+      }
     >
       <div className={styles.stopMarker} />
       <div className={styles.stopInfo}>

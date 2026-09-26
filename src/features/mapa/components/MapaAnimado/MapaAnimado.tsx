@@ -35,35 +35,35 @@ const INITIAL_ZOOM = 9;
 
 export default function MapaAnimado({ ruta }: Props) {
   // ─── Store slices (one selector each → granular re-renders) ──
-  const paradas             = useMapaStore((s) => s.paradas);
-  const puntosInteres       = useMapaStore((s) => s.puntosInteres);
-  const placingStop         = useMapaStore((s) => s.placingStop);
-  const pendingStopLatLng   = useMapaStore((s) => s.pendingStopLatLng);
-  const placingPOI          = useMapaStore((s) => s.placingPOI);
-  const pendingPoiLatLng    = useMapaStore((s) => s.pendingPoiLatLng);
-  const isPlaying           = useMapaStore((s) => s.isPlaying);
-  const speed               = useMapaStore((s) => s.speed);
-  const followCamLevel      = useMapaStore((s) => s.followCamLevel);
-  const editMode            = useMapaStore((s) => s.editMode);
-  const hideUi              = useMapaStore((s) => s.hideUi);
-  const lightMap            = useMapaStore((s) => s.lightMap);
-  const loadRoute           = useMapaStore((s) => s.loadRoute);
-  const loadPuntosInteres   = useMapaStore((s) => s.loadPuntosInteres);
-  const removeStop          = useMapaStore((s) => s.removeStop);
-  const updateStopName      = useMapaStore((s) => s.updateStopName);
-  const addStop             = useMapaStore((s) => s.addStop);
-  const setPlacingStop      = useMapaStore((s) => s.setPlacingStop);
+  const paradas = useMapaStore((s) => s.paradas);
+  const puntosInteres = useMapaStore((s) => s.puntosInteres);
+  const placingStop = useMapaStore((s) => s.placingStop);
+  const pendingStopLatLng = useMapaStore((s) => s.pendingStopLatLng);
+  const placingPOI = useMapaStore((s) => s.placingPOI);
+  const pendingPoiLatLng = useMapaStore((s) => s.pendingPoiLatLng);
+  const isPlaying = useMapaStore((s) => s.isPlaying);
+  const speed = useMapaStore((s) => s.speed);
+  const followCamLevel = useMapaStore((s) => s.followCamLevel);
+  const editMode = useMapaStore((s) => s.editMode);
+  const hideUi = useMapaStore((s) => s.hideUi);
+  const lightMap = useMapaStore((s) => s.lightMap);
+  const loadRoute = useMapaStore((s) => s.loadRoute);
+  const loadPuntosInteres = useMapaStore((s) => s.loadPuntosInteres);
+  const removeStop = useMapaStore((s) => s.removeStop);
+  const updateStopName = useMapaStore((s) => s.updateStopName);
+  const addStop = useMapaStore((s) => s.addStop);
+  const setPlacingStop = useMapaStore((s) => s.setPlacingStop);
   const setPendingStopLatLng = useMapaStore((s) => s.setPendingStopLatLng);
-  const addPuntoInteres     = useMapaStore((s) => s.addPuntoInteres);
-  const removePuntoInteres  = useMapaStore((s) => s.removePuntoInteres);
-  const setPlacingPOI       = useMapaStore((s) => s.setPlacingPOI);
+  const addPuntoInteres = useMapaStore((s) => s.addPuntoInteres);
+  const removePuntoInteres = useMapaStore((s) => s.removePuntoInteres);
+  const setPlacingPOI = useMapaStore((s) => s.setPlacingPOI);
   const setPendingPoiLatLng = useMapaStore((s) => s.setPendingPoiLatLng);
-  const setIsPlaying        = useMapaStore((s) => s.setIsPlaying);
-  const setSpeed            = useMapaStore((s) => s.setSpeed);
-  const toggleFollow        = useMapaStore((s) => s.toggleFollow);
-  const toggleEdit          = useMapaStore((s) => s.toggleEdit);
-  const toggleHideUi        = useMapaStore((s) => s.toggleHideUi);
-  const toggleLightMap      = useMapaStore((s) => s.toggleLightMap);
+  const setIsPlaying = useMapaStore((s) => s.setIsPlaying);
+  const setSpeed = useMapaStore((s) => s.setSpeed);
+  const toggleFollow = useMapaStore((s) => s.toggleFollow);
+  const toggleEdit = useMapaStore((s) => s.toggleEdit);
+  const toggleHideUi = useMapaStore((s) => s.toggleHideUi);
+  const toggleLightMap = useMapaStore((s) => s.toggleLightMap);
 
   const [showPOIPanel, setShowPOIPanel] = useState(false);
 
@@ -80,23 +80,20 @@ export default function MapaAnimado({ ruta }: Props) {
   // ─── Leaflet + animation pipeline ────────────────────────────
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  const onMapClick = useCallback(
-    ({ lat, lng }: { lat: number; lng: number }) => {
-      const state = useMapaStore.getState();
-      if (!state.editMode) return;
-      if (state.placingPOI) {
-        state.setPendingPoiLatLng({ lat, lng });
-        state.setPlacingPOI(false);
-        return;
-      }
-      if (state.placingStop) {
-        state.setPendingStopLatLng({ lat, lng });
-        state.setPlacingStop(false);
-        return;
-      }
-    },
-    []
-  );
+  const onMapClick = useCallback(({ lat, lng }: { lat: number; lng: number }) => {
+    const state = useMapaStore.getState();
+    if (!state.editMode) return;
+    if (state.placingPOI) {
+      state.setPendingPoiLatLng({ lat, lng });
+      state.setPlacingPOI(false);
+      return;
+    }
+    if (state.placingStop) {
+      state.setPendingStopLatLng({ lat, lng });
+      state.setPlacingStop(false);
+      return;
+    }
+  }, []);
 
   const { L, map } = useLeafletMap({
     containerRef: mapContainerRef,

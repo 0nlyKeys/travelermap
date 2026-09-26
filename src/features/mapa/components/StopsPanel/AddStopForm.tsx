@@ -57,7 +57,11 @@ export function AddStopForm({
           <div className={styles.placingHint}>
             <span>Haz click en el mapa...</span>
           </div>
-          <button type="button" className={styles.cancelPlacing} onClick={onCancelPlacing}>
+          <button
+            type="button"
+            className={styles.cancelPlacing}
+            onClick={onCancelPlacing}
+          >
             cancelar
           </button>
         </div>

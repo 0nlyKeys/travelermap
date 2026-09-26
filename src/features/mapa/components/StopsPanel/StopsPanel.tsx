@@ -44,6 +44,8 @@ export function StopsPanel({
     styles.sidePanel,
     hidden ? styles.hidden : '',
     editMode ? styles.editMode : '',
+    // On small screens the POI sheet docks below this one; make room for it.
+    poiPanelOpen ? styles.shifted : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -76,7 +78,9 @@ export function StopsPanel({
       {editMode && onTogglePOIPanel && (
         <button
           type="button"
-          className={[styles.poiTab, poiPanelOpen ? styles.poiTabActive : ''].filter(Boolean).join(' ')}
+          className={[styles.poiTab, poiPanelOpen ? styles.poiTabActive : '']
+            .filter(Boolean)
+            .join(' ')}
           onClick={onTogglePOIPanel}
           title="Puntos de interés"
           aria-label="Abrir panel de puntos de interés"

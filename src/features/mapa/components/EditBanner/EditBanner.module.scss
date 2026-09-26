@@ -3,14 +3,26 @@
 
 .editBanner {
   position: absolute;
-  top: 110px;
+  top: t.$offset-actions-top;
   left: 50%;
   transform: translateX(-50%);
   z-index: t.$z-panel;
-  background: t.$color-accent;
-  color: t.$color-bg;
+  background: t.$accent;
+  color: t.$accent-contrast;
   padding: t.$space-2 t.$space-5;
-  @include m.text-mono-caps(10px, 0.2em);
+  @include m.text-mono-caps(t.$fs-label-sm, t.$tracking-label);
   border-radius: t.$radius-sm;
-  font-weight: 700;
+  font-weight: t.$weight-bold;
+  text-align: center;
+
+  // Sits clear of the action stack, which moves up on small screens.
+  @include m.below(t.$bp-md) {
+    top: calc(#{t.$offset-actions-top} - 26px);
+    left: t.$space-3;
+    right: calc(#{t.$space-3} + 52px);
+    transform: none;
+    font-size: t.$fs-label-xs;
+    letter-spacing: 0.12em;
+    padding: t.$space-2 t.$space-3;
+  }
 }

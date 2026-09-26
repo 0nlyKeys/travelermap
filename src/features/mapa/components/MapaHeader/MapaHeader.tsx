@@ -17,7 +17,13 @@ export function MapaHeader({ titulo, subtitulo, distanceKm, totalKm, hidden }: P
   return (
     <header className={`${styles.topBar} ${hidden ? styles.hidden : ''}`}>
       <div className={styles.brand}>
-        <div className={styles.brandTitle}>{titulo.toUpperCase()}</div>
+        {/* The real <h1> lives in the server page: the map is ssr:false, so a
+            heading rendered here would be missing from the static HTML. This
+            one is the visible copy, hidden from the a11y tree to avoid a
+            duplicate announcement. */}
+        <div className={styles.brandTitle} aria-hidden="true">
+          {titulo.toUpperCase()}
+        </div>
         <div className={styles.brandSubtitle}>{subtitulo}</div>
       </div>
       <div className={styles.stats}>

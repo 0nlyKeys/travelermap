@@ -1,0 +1,16 @@
+{
+  "slug": "machin",
+  "titulo": "Volcan Cerro Machin",
+  "subtitulo": "Bogotá → Volcan Cerro Machin · Vstrom 250 SX",
+  "paradas": [
+    { "nombre": "Bogotá",     "lat": 4.6515, "lng": -74.1285 },
+    { "nombre": "Vianí",      "lat": 4.8750, "lng": -74.5613 },
+    { "nombre": "Líbano",      "lat": 4.92297, "lng": -75.06472 },
+    { "nombre": "Murillo",      "lat": 4.874645, "lng": -75.169880 },
+    { "nombre": "PNN Los Nevados", "lat": 4.938522,  "lng": -75.349421 }
+  ],
+  "metadata": {
+    "moto": "Vstrom 250 SX",
+    "fecha": "2026-09"
+  }
+}

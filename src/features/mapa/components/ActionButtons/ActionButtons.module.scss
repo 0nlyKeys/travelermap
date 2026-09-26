@@ -3,13 +3,19 @@
 
 .topActions {
   position: absolute;
-  top: 110px;
+  top: t.$offset-actions-top;
   right: t.$space-8;
   z-index: t.$z-actions;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: opacity t.$dur-med;
+  transition: opacity t.$dur-med t.$ease-out;
+
+  @include m.below(t.$bp-md) {
+    top: calc(#{t.$offset-actions-top} - 18px);
+    right: t.$space-3;
+    gap: t.$space-2;
+  }
 }
 
 // Whole stack hidden BUT toggle button still clickable
@@ -23,44 +29,40 @@
 .actionBtn {
   @include m.glass-panel;
   @include m.flex-center;
-  color: t.$color-text;
+  @include m.transition(border-color, color, background, opacity, transform);
+  @include m.focus-ring;
+  @include m.tactile;
+  color: t.$text-primary;
   width: 44px;
   height: 44px;
   border-radius: t.$radius-full;
   cursor: pointer;
-  transition: all t.$dur-fast;
 
   &:hover {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
+    border-color: t.$accent;
+    color: t.$accent;
   }
 
   &.active {
-    background: t.$color-accent;
-    border-color: t.$color-accent;
-    color: t.$color-bg;
+    background: t.$accent;
+    border-color: t.$accent;
+    color: t.$accent-contrast;
+  }
+
+  @include m.below(t.$bp-md) {
+    width: 40px;
+    height: 40px;
   }
 }
 
 .toggleUiBtn {
-  &.dimmed { opacity: 0.2; }
-  &.dimmed:hover { opacity: 1; }
-}
-
-// ─── Light theme ─────────────────────────────────────────────────────
-:global([data-theme='light']) .actionBtn {
-  background: rgba(235, 235, 235, 0.95);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #1a1a1a;
-
-  &:hover {
-    border-color: t.$color-accent;
-    color: t.$color-accent;
+  &.dimmed {
+    opacity: 0.2;
   }
-
-  &.active {
-    background: t.$color-accent;
-    border-color: t.$color-accent;
-    color: #fff;
+  &.dimmed:hover {
+    opacity: 1;
+  }
+  &.dimmed:focus-visible {
+    opacity: 1;
   }
 }

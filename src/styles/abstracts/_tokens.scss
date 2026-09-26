@@ -1,21 +1,80 @@
 // Design tokens — single source of truth for colors, typography, spacing.
 // Consumed via @use 'styles/abstracts/tokens' as t;
+//
+// Two layers:
+//   1. RAW scss values (build-time, below) — palette + scales.
+//   2. SEMANTIC css custom-properties (runtime, see base/_theme.scss) — the
+//      layer components should read, so light/dark swap in one place.
 
-// ─── Colors ────────────────────────────────────────────────────────────
-$color-bg:          #0a0a0a;
-$color-bg-elev:     rgba(18, 18, 18, 0.94);
-$color-bg-darker:   #050505;
-$color-accent:      #ff6b1a;
+// ─── Palette (raw) ─────────────────────────────────────────────────────
+$color-bg: #0a0a0a;
+$color-bg-elev: rgba(18, 18, 18, 0.94);
+$color-bg-darker: #050505;
+$color-accent: #ff6b1a;
 $color-accent-soft: #ff8845;
-$color-text:        #f5f5f5;
-$color-text-dim:    #888;
-$color-border:      rgba(255, 255, 255, 0.08);
-$color-danger:      #ff4444;
+$color-text: #f5f5f5;
+$color-text-dim: #888;
+$color-border: rgba(255, 255, 255, 0.08);
+$color-danger: #ff4444;
+
+// Light-theme counterparts. No pure #fff / #000 (kills depth).
+$color-bg-light: #f2f2f2;
+$color-bg-elev-light: rgba(238, 238, 238, 0.95);
+$color-bg-darker-light: #e6e6e6;
+$color-text-light: #1a1a1a;
+$color-text-dim-light: #565656;
+$color-border-light: rgba(0, 0, 0, 0.12);
+
+// ─── Semantic colors (read these, not the palette) ─────────────────────
+// Resolved per theme in base/_theme.scss.
+$surface: var(--surface);
+$surface-sunken: var(--surface-sunken);
+$surface-panel: var(--surface-panel);
+$surface-scrim: var(--surface-scrim);
+$surface-field: var(--surface-field);
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$border: var(--border);
+$border-strong: var(--border-strong);
+$accent: var(--accent);
+$accent-soft: var(--accent-soft);
+$accent-contrast: var(--accent-contrast); // text/icon sitting ON accent
+$accent-a08: var(--accent-a08);
+$accent-a12: var(--accent-a12);
+$accent-a20: var(--accent-a20);
+$accent-a35: var(--accent-a35);
+$danger: var(--danger);
 
 // ─── Typography ────────────────────────────────────────────────────────
-$font-display: 'Bebas Neue', sans-serif;
-$font-body:    'Manrope', sans-serif;
-$font-mono:    'Space Mono', monospace;
+// Families are injected by next/font in app/layout.tsx; the literal names
+// stay as fallbacks so the stack is readable and degrades cleanly.
+$font-display: var(--font-display, 'Bebas Neue'), 'Bebas Neue', sans-serif;
+$font-body: var(--font-body, 'Manrope'), 'Manrope', sans-serif;
+$font-mono: var(--font-mono, 'Space Mono'), 'Space Mono', monospace;
+
+$weight-light: 300;
+$weight-medium: 500;
+$weight-bold: 700;
+
+// Fluid display scale. Every display size in the app comes from here so the
+// cockpit does not blow out on a phone.
+$fs-hero: clamp(3.25rem, 13vw, 6.5rem); // home h1
+$fs-overlay: clamp(2.5rem, 11vw, 5rem); // arriving-at-stop overlay
+$fs-title: clamp(1.5rem, 5.5vw, 2.25rem); // map brand title / card title
+$fs-stat: clamp(1.25rem, 4.5vw, 1.75rem); // km readouts
+$fs-stop: 1.1875rem; // 19px, panel row
+
+// Mono / label scale (fixed: these are instrument labels, not prose).
+$fs-label-xs: 9px;
+$fs-label-sm: 10px;
+$fs-label-md: 11px;
+$fs-body-sm: 12px;
+$fs-body: 15px;
+
+$tracking-tight: 0.03em;
+$tracking-wide: 0.06em;
+$tracking-label: 0.2em;
+$tracking-caps: 0.25em;
 
 // ─── Spacing ───────────────────────────────────────────────────────────
 $space-1: 4px;
@@ -24,37 +83,57 @@ $space-3: 12px;
 $space-4: 16px;
 $space-5: 20px;
 $space-6: 24px;
+$space-7: 28px;
 $space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+$space-20: 80px;
+
+// Cockpit anchor offsets (were scattered magic numbers).
+$offset-actions-top: 110px;
+$offset-hint-bottom: 140px;
+$offset-dock-bottom: 120px;
 
 // ─── Radii ─────────────────────────────────────────────────────────────
+// SHAPE RULE (one documented system, applied everywhere):
+//   surfaces  (panels, cards, sheets) → $radius-md
+//   inputs / chips / small buttons    → $radius-sm
+//   pills                             → $radius-lg
+//   circular icon controls            → $radius-full
 $radius-sm: 2px;
 $radius-md: 4px;
 $radius-lg: 10px;
 $radius-full: 50%;
 
+// ─── Breakpoints ───────────────────────────────────────────────────────
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+
 // ─── Z-index scale ─────────────────────────────────────────────────────
-$z-map:        1;
-$z-overlay:    998;
-$z-hint:       999;
-$z-panel:      1000;
-$z-actions:    1001;
-$z-progress:   1001;
-$z-loading:    9999;
+$z-map: 1;
+$z-overlay: 998;
+$z-hint: 999;
+$z-panel: 1000;
+$z-actions: 1001;
+$z-progress: 1002;
+$z-loading: 9999;
 
 // ─── Motion ────────────────────────────────────────────────────────────
 $ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 $dur-fast: 0.2s;
-$dur-med:  0.4s;
+$dur-med: 0.4s;
 $dur-slow: 0.6s;
 
-// ─── CSS custom-property bridge (use inside :root for legacy access) ───
+// ─── CSS custom-property bridge (legacy imperative access) ─────────────
+// Kept so any future imperative Leaflet code reading var(--bg) / var(--text)
+// keeps working. Names owned by the theme layer (--accent, --border, --danger,
+// --surface*, --text-primary…) are NOT redeclared here: doing so would shadow
+// the [data-theme] override, which lands on this same element.
 @mixin css-vars {
-  --bg:          #{$color-bg};
-  --bg-elev:     #{$color-bg-elev};
-  --accent:      #{$color-accent};
-  --accent-soft: #{$color-accent-soft};
-  --text:        #{$color-text};
-  --text-dim:    #{$color-text-dim};
-  --border:      #{$color-border};
-  --danger:      #{$color-danger};
+  --bg: var(--surface);
+  --bg-elev: var(--surface-panel);
+  --text: var(--text-primary);
+  --text-dim: var(--text-secondary);
 }

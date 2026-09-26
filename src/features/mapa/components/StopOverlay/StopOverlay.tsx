@@ -11,7 +11,10 @@ interface Props {
  */
 export function StopOverlay({ show, isStart, name }: Props) {
   return (
-    <div className={`${styles.currentStop} ${show ? styles.show : ''}`} aria-hidden={!show}>
+    <div
+      className={`${styles.currentStop} ${show ? styles.show : ''}`}
+      aria-hidden={!show}
+    >
       <div className={styles.currentStopLabel}>
         {isStart ? 'Inicio de Ruta' : 'Llegando a'}
       </div>

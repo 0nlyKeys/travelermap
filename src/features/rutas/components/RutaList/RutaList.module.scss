@@ -1,50 +1,200 @@
 @use 'styles/abstracts/tokens' as t;
 @use 'styles/abstracts/mixins' as m;
 
+// ─── Grid ──────────────────────────────────────────────────────────────
+// Fixed 2 columns instead of auto-fill: paired with the `wide` odd-tail card
+// in RutaList.tsx, N routes always produce exactly N filled cells.
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: t.$space-4;
-  width: 100%;
-  max-width: 900px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: t.$space-5;
+
+  @include m.below(t.$bp-md) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: t.$space-4;
+  }
 }
 
+// ─── Empty state ───────────────────────────────────────────────────────
 .empty {
-  color: t.$color-text-dim;
+  border: 1px dashed t.$border;
+  border-radius: t.$radius-md;
+  padding: t.$space-12 t.$space-6;
   text-align: center;
-  grid-column: 1 / -1;
 }
 
+.emptyTitle {
+  @include m.text-display(t.$fs-title, t.$tracking-wide);
+  color: t.$text-primary;
+}
+
+.emptyHint {
+  @include m.text-body(t.$fs-body-sm);
+  color: t.$text-secondary;
+  margin-top: t.$space-2;
+
+  code {
+    font-family: t.$font-mono;
+    color: t.$accent;
+  }
+}
+
+// ─── Card ──────────────────────────────────────────────────────────────
 .card {
-  display: block;
-  border: 1px solid t.$color-border;
-  padding: t.$space-6;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid t.$border;
   border-radius: t.$radius-md;
+  background: t.$surface-panel;
   text-decoration: none;
-  color: t.$color-text;
-  transition: border-color t.$dur-fast, background t.$dur-fast, transform t.$dur-fast;
-  background: rgba(18, 18, 18, 0.6);
+  color: t.$text-primary;
+  overflow: hidden;
+  @include m.transition(border-color, background, transform);
+  @include m.focus-ring;
+  @include m.tactile;
+
+  @include m.motion-safe {
+    animation: cardIn t.$dur-med t.$ease-out both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
 
   &:hover {
-    border-color: t.$color-accent;
-    background: rgba(18, 18, 18, 0.85);
+    border-color: t.$accent;
     transform: translateY(-2px);
+
+    .cardVisual {
+      background:
+        radial-gradient(120% 140% at 12% 100%, t.$accent-a20 0%, transparent 62%),
+        t.$surface-sunken;
+    }
+  }
+}
+
+.cardWide {
+  grid-column: 1 / -1;
+
+  @include m.below(t.$bp-md) {
+    grid-column: auto;
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ─── Visual ────────────────────────────────────────────────────────────
+// Every cell carries a real, data-derived visual: the route's own shape.
+.cardVisual {
+  position: relative;
+  aspect-ratio: 16 / 7;
+  background:
+    radial-gradient(120% 140% at 12% 100%, t.$accent-a12 0%, transparent 62%),
+    t.$surface-sunken;
+  border-bottom: 1px solid t.$border;
+
+  .cardWide & {
+    aspect-ratio: 32 / 7;
+    background:
+      radial-gradient(90% 180% at 88% 0%, t.$accent-a12 0%, transparent 58%),
+      t.$surface-sunken;
+  }
+
+  @include m.below(t.$bp-md) {
+    aspect-ratio: 16 / 8;
+  }
+}
+
+.trace,
+.traceEmpty {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tracePath {
+  fill: none;
+  stroke: t.$accent;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.traceDot {
+  fill: t.$surface-sunken;
+  stroke: t.$accent;
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.traceStart {
+  fill: t.$surface-sunken;
+  stroke: t.$accent;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.traceEnd {
+  fill: t.$accent;
+}
+
+// ─── Body ──────────────────────────────────────────────────────────────
+.cardBody {
+  padding: t.$space-5 t.$space-6 t.$space-6;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  @include m.below(t.$bp-md) {
+    padding: t.$space-4 t.$space-4 t.$space-5;
   }
 }
 
 .cardTitle {
-  @include m.text-display(28px, 0.05em);
+  @include m.text-display(t.$fs-title, 0.04em);
+  margin: 0;
 }
 
 .cardSubtitle {
-  @include m.text-mono-caps(10px, 0.2em);
-  color: t.$color-accent;
-  margin-top: 6px;
+  @include m.text-mono-caps(t.$fs-label-sm, t.$tracking-label);
+  color: t.$accent;
+  margin-top: t.$space-2;
+  line-height: 1.5;
 }
 
 .cardMeta {
-  font-family: t.$font-mono;
-  font-size: 11px;
-  color: t.$color-text-dim;
-  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$space-6;
+  margin: auto 0 0;
+  padding-top: t.$space-4;
+  border-top: 1px solid t.$border;
+}
+
+// Mono for every value: these are instrument readouts, not headlines.
+.metaItem {
+  min-width: 0;
+
+  dt {
+    @include m.text-mono-caps(t.$fs-label-xs, t.$tracking-label);
+    color: t.$text-secondary;
+  }
+
+  dd {
+    font-family: t.$font-mono;
+    font-size: t.$fs-body-sm;
+    font-weight: t.$weight-bold;
+    letter-spacing: t.$tracking-tight;
+    color: t.$text-primary;
+    margin: 6px 0 0;
+    @include m.truncate;
+  }
 }

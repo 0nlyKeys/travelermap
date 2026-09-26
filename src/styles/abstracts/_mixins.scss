@@ -1,5 +1,6 @@
 @use 'tokens' as t;
 
+// ─── Layout ────────────────────────────────────────────────────────────
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -7,38 +8,102 @@
 }
 
 @mixin glass-panel {
-  background: t.$color-bg-elev;
+  background: t.$surface-panel;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid t.$color-border;
+  border: 1px solid t.$border;
 }
 
-@mixin text-mono-caps($size: 10px, $tracking: 0.2em) {
+// ─── Responsive ────────────────────────────────────────────────────────
+// Mobile fallbacks are declared per component (Section 4.7), never assumed.
+@mixin below($bp) {
+  @media (max-width: #{$bp - 1px}) {
+    @content;
+  }
+}
+
+@mixin above($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+// ─── Typography ────────────────────────────────────────────────────────
+@mixin text-mono-caps($size: t.$fs-label-sm, $tracking: t.$tracking-label) {
   font-family: t.$font-mono;
   font-size: $size;
   letter-spacing: $tracking;
   text-transform: uppercase;
 }
 
-@mixin text-display($size: 36px, $tracking: 0.06em) {
+@mixin text-display($size: t.$fs-title, $tracking: t.$tracking-wide) {
   font-family: t.$font-display;
   font-size: $size;
   letter-spacing: $tracking;
   line-height: 1;
 }
 
-@mixin focus-ring {
-  outline: none;
-  &:focus-visible {
-    box-shadow: 0 0 0 2px t.$color-accent;
+@mixin text-body($size: t.$fs-body, $weight: t.$weight-light) {
+  font-family: t.$font-body;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: 1.6;
+}
+
+// ─── Motion ────────────────────────────────────────────────────────────
+// Always name the properties. `transition: all` repaints everything.
+@mixin transition($props...) {
+  $out: ();
+  @each $p in $props {
+    $out: append($out, #{$p} t.$dur-fast t.$ease-out, comma);
+  }
+  transition: $out;
+}
+
+// Wrap anything decorative. Users asking for less motion get none of it.
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
   }
 }
 
+// Physical push on press (Section 4.5).
+@mixin tactile {
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// ─── Focus ─────────────────────────────────────────────────────────────
+// Every interactive element gets this. Keyboard nav must be visible.
+@mixin focus-ring($offset: 2px) {
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid t.$accent;
+    outline-offset: $offset;
+  }
+}
+
+// ─── Misc ──────────────────────────────────────────────────────────────
 @mixin scrollbar-thin {
-  &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
+  scrollbar-width: thin;
+  scrollbar-color: t.$border transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
   &::-webkit-scrollbar-thumb {
-    background: t.$color-border;
+    background: t.$border;
     border-radius: t.$radius-sm;
   }
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

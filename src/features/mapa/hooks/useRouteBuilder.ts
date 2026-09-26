@@ -2,8 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import type * as LeafletType from 'leaflet';
 import type { Parada, PuntoInteres, LatLng } from '@features/mapa/types/ruta';
 import { fetchRoute } from '@features/mapa/lib/routeGeometry';
-import { createMotoIcon, createStopLabelIcon, createPuntoInteresIcon } from '@features/mapa/lib/leafletIcons';
+import {
+  createMotoIcon,
+  createStopLabelIcon,
+  createPuntoInteresIcon,
+} from '@features/mapa/lib/leafletIcons';
 import { cumulativeDistances } from '@features/mapa/lib/distance';
+import {
+  MAP_ACCENT,
+  MAP_SURFACE,
+  MAP_ROUTE_PENDING,
+} from '@features/mapa/lib/mapPalette';
 
 export interface RouteBuilderHandle {
   loading: boolean;
@@ -44,7 +53,7 @@ export function useRouteBuilder({
   fitOnRebuild = true,
 }: Opts): RouteBuilderHandle {
   const [loading, setLoading] = useState(true);
-  const [totalKm, setTotalKm] = useState('—');
+  const [totalKm, setTotalKm] = useState('0');
   const [version, setVersion] = useState(0);
 
   const routeRef = useRef<LatLng[]>([]);
@@ -80,8 +89,8 @@ export function useRouteBuilder({
 
         const dot = L.circleMarker([stop.lat, stop.lng], {
           radius: 6,
-          color: '#ff6b1a',
-          fillColor: '#0a0a0a',
+          color: MAP_ACCENT,
+          fillColor: MAP_SURFACE,
           fillOpacity: 1,
           weight: 2,
         }).addTo(map);
@@ -105,7 +114,7 @@ export function useRouteBuilder({
         routeRef.current = [];
         distancesRef.current = [];
         totalRef.current = 0;
-        setTotalKm('—');
+        setTotalKm('0');
         setLoading(false);
         setVersion((v) => v + 1);
         return;
@@ -131,21 +140,21 @@ export function useRouteBuilder({
       if (glowLineRef.current) map.removeLayer(glowLineRef.current);
 
       fullRouteLineRef.current = L.polyline(coords, {
-        color: '#666',
+        color: MAP_ROUTE_PENDING,
         weight: 1.5,
         opacity: 0.5,
         dashArray: '3 6',
       }).addTo(map);
 
       glowLineRef.current = L.polyline([], {
-        color: '#ff6b1a',
+        color: MAP_ACCENT,
         weight: 10,
         opacity: 0.25,
         lineCap: 'round',
       }).addTo(map);
 
       traveledLineRef.current = L.polyline([], {
-        color: '#ff6b1a',
+        color: MAP_ACCENT,
         weight: 3,
         opacity: 1,
         lineCap: 'round',

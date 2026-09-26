@@ -9,11 +9,30 @@
   z-index: t.$z-panel;
   @include m.glass-panel;
   width: 300px;
-  border-radius: t.$radius-sm;
-  transition: opacity t.$dur-med;
+  border-radius: t.$radius-md;
+  transition: opacity t.$dur-med t.$ease-out;
   max-height: 80vh;
   display: flex;
   flex-direction: column;
+
+  // Below md the side rail becomes a bottom sheet above the transport.
+  @include m.below(t.$bp-md) {
+    left: t.$space-3;
+    right: t.$space-3;
+    top: auto;
+    bottom: calc(#{t.$offset-dock-bottom} - 24px);
+    transform: none;
+    width: auto;
+    max-height: 32vh;
+  }
+}
+
+// Makes room for the POI sheet stacked underneath it on small screens.
+.shifted {
+  @include m.below(t.$bp-md) {
+    bottom: calc(#{t.$offset-dock-bottom} + 26vh);
+    max-height: 26vh;
+  }
 }
 
 .hidden {
@@ -23,21 +42,26 @@
 
 .panelHeader {
   padding: t.$space-5 t.$space-5 14px;
-  border-bottom: 1px solid t.$color-border;
+  border-bottom: 1px solid t.$border;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
+
+  @include m.below(t.$bp-md) {
+    padding: t.$space-3 t.$space-4;
+  }
 }
 
 .panelTitle {
-  @include m.text-mono-caps(9px, 0.25em);
-  color: t.$color-text-dim;
+  @include m.text-mono-caps(t.$fs-label-xs, t.$tracking-caps);
+  color: t.$text-secondary;
 }
 
 .panelCount {
   font-family: t.$font-mono;
-  font-size: 10px;
-  color: t.$color-accent;
+  font-size: t.$fs-label-sm;
+  color: t.$accent;
   letter-spacing: 0.1em;
 }
 
@@ -56,18 +80,29 @@
   gap: t.$space-3;
   padding: 10px t.$space-1;
   opacity: 0.4;
-  transition: all 0.3s;
+  @include m.transition(opacity, color);
   position: relative;
 
-  &.activeStop { opacity: 1; }
-  &.passedStop { opacity: 0.75; }
-  &.editMode { opacity: 1; }
+  &.activeStop {
+    opacity: 1;
+  }
+  &.passedStop {
+    opacity: 0.75;
+  }
+  &.editMode {
+    opacity: 1;
+  }
 
   &.clickable {
     cursor: pointer;
-    &:hover {
+    @include m.focus-ring(-2px);
+
+    &:hover,
+    &:focus-visible {
       opacity: 0.85;
-      .stopMarker { border-color: t.$color-accent; }
+      .stopMarker {
+        border-color: t.$accent;
+      }
     }
   }
 
@@ -78,33 +113,35 @@
     top: 18px;
     bottom: -2px;
     width: 1px;
-    background: t.$color-border;
+    background: t.$border;
     z-index: 1;
   }
-  &:last-child::before { display: none; }
+  &:last-child::before {
+    display: none;
+  }
 }
 
 .stopMarker {
   width: 10px;
   height: 10px;
-  border: 1.5px solid t.$color-text-dim;
+  border: 1.5px solid t.$text-secondary;
   border-radius: t.$radius-full;
   flex-shrink: 0;
-  transition: all 0.3s;
+  @include m.transition(background, border-color, box-shadow);
   position: relative;
   z-index: 2;
-  background: t.$color-bg;
+  background: t.$surface;
 }
 
 .stopItem.activeStop .stopMarker {
-  background: t.$color-accent;
-  border-color: t.$color-accent;
-  box-shadow: 0 0 16px t.$color-accent;
+  background: t.$accent;
+  border-color: t.$accent;
+  box-shadow: 0 0 16px t.$accent;
 }
 
 .stopItem.passedStop .stopMarker {
-  background: t.$color-text-dim;
-  border-color: t.$color-text-dim;
+  background: t.$text-secondary;
+  border-color: t.$text-secondary;
 }
 
 .stopInfo {
@@ -113,73 +150,87 @@
 }
 
 .stopName {
-  @include m.text-display(19px);
+  @include m.text-display(t.$fs-stop, t.$tracking-wide);
   line-height: 1.1;
+  color: t.$text-primary;
 }
 
 .stopCoords {
   font-family: t.$font-mono;
-  font-size: 9px;
-  color: t.$color-text-dim;
+  font-size: t.$fs-label-xs;
+  color: t.$text-secondary;
   margin-top: 2px;
   letter-spacing: 0.05em;
 }
 
 .stopNameInput {
-  @include m.text-display(18px);
+  @include m.text-display(18px, t.$tracking-wide);
   line-height: 1.1;
   background: transparent;
   border: none;
-  border-bottom: 1px dashed t.$color-border;
-  color: t.$color-text;
+  border-bottom: 1px dashed t.$border;
+  color: t.$text-primary;
   width: 100%;
   padding: 2px 0;
   outline: none;
 
-  &:focus { border-bottom-color: t.$color-accent; }
+  &:focus,
+  &:focus-visible {
+    border-bottom-color: t.$accent;
+  }
 }
 
 .stopDelete {
   background: transparent;
-  border: 1px solid t.$color-border;
-  color: t.$color-text-dim;
+  border: 1px solid t.$border;
+  color: t.$text-secondary;
   width: 24px;
   height: 24px;
   border-radius: t.$radius-full;
   cursor: pointer;
   @include m.flex-center;
   font-size: 14px;
-  transition: all t.$dur-fast;
+  @include m.transition(border-color, color);
+  @include m.focus-ring;
   flex-shrink: 0;
 
   &:hover {
-    border-color: t.$color-danger;
-    color: t.$color-danger;
+    border-color: t.$danger;
+    color: t.$danger;
   }
 }
 
 /* EDIT FOOTER */
 .editFooter {
-  border-top: 1px solid t.$color-border;
+  border-top: 1px solid t.$border;
   padding: t.$space-4 t.$space-5;
   display: flex;
   flex-direction: column;
   gap: t.$space-3;
+  flex-shrink: 0;
+
+  @include m.below(t.$bp-md) {
+    padding: t.$space-3 t.$space-4;
+  }
 }
 
 .placeOnMapBtn {
-  background: rgba(255, 107, 26, 0.1);
-  border: 1px solid rgba(255, 107, 26, 0.35);
-  color: t.$color-accent;
+  background: t.$accent-a08;
+  border: 1px solid t.$accent-a35;
+  color: t.$accent;
   padding: 8px;
   font-family: t.$font-mono;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-wide;
   cursor: pointer;
   border-radius: t.$radius-sm;
-  transition: all t.$dur-fast;
+  @include m.transition(background, border-color);
+  @include m.focus-ring;
+  @include m.tactile;
 
-  &:hover { background: rgba(255, 107, 26, 0.2); }
+  &:hover {
+    background: t.$accent-a20;
+  }
 }
 
 .placingState {
@@ -191,33 +242,46 @@
 
 .placingHint {
   font-family: t.$font-mono;
-  font-size: 10px;
+  font-size: t.$fs-label-sm;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: t.$color-accent;
+  color: t.$accent;
   text-align: center;
-  animation: stopBlink 1.4s ease-in-out infinite;
 
-  span { color: t.$color-accent; }
+  @include m.motion-safe {
+    animation: stopBlink 1.4s ease-in-out infinite;
+  }
+
+  span {
+    color: t.$accent;
+  }
 }
 
 @keyframes stopBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .cancelPlacing {
   background: transparent;
   border: none;
-  color: t.$color-text-dim;
+  color: t.$text-secondary;
   font-family: t.$font-mono;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: t.$fs-label-sm;
+  letter-spacing: t.$tracking-wide;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
+  @include m.focus-ring;
 
-  &:hover { color: t.$color-text; }
+  &:hover {
+    color: t.$text-primary;
+  }
 }
 
 // ─── POI panel toggle tab ────────────────────────────────────────────────────
@@ -228,53 +292,52 @@
   transform: translateY(-50%);
   width: 14px;
   height: 52px;
-  background: t.$color-bg-elev;
-  border: 1px solid t.$color-border;
+  background: t.$surface-panel;
+  border: 1px solid t.$border;
   border-left: none;
   border-radius: 0 t.$radius-md t.$radius-md 0;
-  color: t.$color-text-dim;
+  color: t.$text-secondary;
   cursor: pointer;
   @include m.flex-center;
-  font-size: 9px;
-  transition: all t.$dur-fast;
+  font-size: t.$fs-label-xs;
+  @include m.transition(color, border-color, background);
+  @include m.focus-ring;
   padding: 0;
 
   &:hover {
-    color: t.$color-accent;
-    border-color: rgba(255, 107, 26, 0.35);
-    background: rgba(255, 107, 26, 0.06);
+    color: t.$accent;
+    border-color: t.$accent-a35;
+    background: t.$accent-a08;
+  }
+
+  // Full-width sheet has no side gutter to hang a tab in: dock it on top.
+  @include m.below(t.$bp-md) {
+    right: t.$space-4;
+    left: auto;
+    top: -14px;
+    transform: none;
+    width: 52px;
+    height: 14px;
+    border: 1px solid t.$border;
+    border-bottom: none;
+    border-radius: t.$radius-md t.$radius-md 0 0;
   }
 }
 
 .poiTabActive {
-  color: t.$color-accent;
-  border-color: rgba(255, 107, 26, 0.4);
-  background: rgba(255, 107, 26, 0.1);
-}
-
-:global([data-theme='light']) .poiTab {
-  background: rgba(235, 235, 235, 0.95);
-  border-color: rgba(0, 0, 0, 0.12);
-  color: #888;
-
-  &:hover {
-    color: t.$color-accent;
-    border-color: rgba(255, 107, 26, 0.4);
-    background: rgba(255, 107, 26, 0.08);
-  }
-}
-
-:global([data-theme='light']) .poiTabActive {
-  color: t.$color-accent;
-  background: rgba(255, 107, 26, 0.12);
+  color: t.$accent;
+  border-color: t.$accent-a35;
+  background: t.$accent-a12;
 }
 
 .editHint {
-  @include m.text-mono-caps(9px, 0.15em);
-  color: t.$color-text-dim;
+  @include m.text-mono-caps(t.$fs-label-xs, 0.15em);
+  color: t.$text-secondary;
   line-height: 1.5;
 
-  span { color: t.$color-accent; }
+  span {
+    color: t.$accent;
+  }
 }
 
 .coordInputs {
@@ -282,93 +345,40 @@
   gap: 6px;
 
   input {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid t.$color-border;
-    color: t.$color-text;
+    background: t.$surface-field;
+    border: 1px solid t.$border;
+    color: t.$text-primary;
     padding: t.$space-2 10px;
     font-family: t.$font-mono;
-    font-size: 11px;
+    font-size: t.$fs-label-md;
     border-radius: t.$radius-sm;
     outline: none;
     flex: 1;
     min-width: 0;
 
-    &:focus { border-color: t.$color-accent; }
-    &::placeholder { color: t.$color-text-dim; opacity: 0.6; }
+    &:focus,
+    &:focus-visible {
+      border-color: t.$accent;
+    }
+    &::placeholder {
+      color: t.$text-secondary;
+    }
   }
 }
 
 .addStopBtn {
-  background: t.$color-accent;
-  color: t.$color-bg;
+  background: t.$accent;
+  color: t.$accent-contrast;
   border: none;
   padding: 10px;
   @include m.text-display(14px, 0.1em);
   cursor: pointer;
   border-radius: t.$radius-sm;
-  transition: background t.$dur-fast;
-
-  &:hover { background: t.$color-accent-soft; }
-}
-
-// ─── Light theme ─────────────────────────────────────────────────────
-:global([data-theme='light']) .sidePanel {
-  background: rgba(235, 235, 235, 0.95);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .panelHeader {
-  border-bottom-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .panelTitle {
-  color: #555;
-}
-
-:global([data-theme='light']) .stopName {
-  color: #1a1a1a;
-}
-
-:global([data-theme='light']) .stopCoords {
-  color: #666;
-}
-
-:global([data-theme='light']) .stopMarker {
-  background: #fff;
-  border-color: #999;
-}
-
-:global([data-theme='light']) .stopItem::before {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-:global([data-theme='light']) .stopDelete {
-  border-color: rgba(0, 0, 0, 0.2);
-  color: #666;
+  @include m.transition(background);
+  @include m.focus-ring;
+  @include m.tactile;
 
   &:hover {
-    border-color: t.$color-danger;
-    color: t.$color-danger;
+    background: t.$accent-soft;
   }
-}
-
-:global([data-theme='light']) .editFooter {
-  border-top-color: rgba(0, 0, 0, 0.12);
-}
-
-:global([data-theme='light']) .editHint {
-  color: #555;
-}
-
-:global([data-theme='light']) .coordInputs input {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #1a1a1a;
-
-  &::placeholder { color: #888; opacity: 1; }
-}
-
-:global([data-theme='light']) .stopNameInput {
-  color: #1a1a1a;
-  border-bottom-color: rgba(0, 0, 0, 0.2);
 }

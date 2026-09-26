@@ -43,8 +43,14 @@ export function PuntosInteresPanel({
   const submit = () => {
     const latNum = parseFloat(lat);
     const lngNum = parseFloat(lng);
-    if (!nombre.trim()) { alert('Ingresa un nombre'); return; }
-    if (isNaN(latNum) || isNaN(lngNum)) { alert('Ingresa coordenadas válidas'); return; }
+    if (!nombre.trim()) {
+      alert('Ingresa un nombre');
+      return;
+    }
+    if (isNaN(latNum) || isNaN(lngNum)) {
+      alert('Ingresa coordenadas válidas');
+      return;
+    }
     if (latNum < -90 || latNum > 90 || lngNum < -180 || lngNum > 180) {
       alert('Coordenadas fuera de rango');
       return;
@@ -86,14 +92,19 @@ export function PuntosInteresPanel({
             onClick={() => onFlyTo(poi.lat, poi.lng)}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onFlyTo(poi.lat, poi.lng); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') onFlyTo(poi.lat, poi.lng);
+            }}
           >
             <span className={styles.pillDot} />
             <span className={styles.pillName}>{poi.nombre}</span>
             <button
               type="button"
               className={styles.pillDelete}
-              onClick={(e) => { e.stopPropagation(); onRemove(poi.id); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(poi.id);
+              }}
               title="Eliminar"
               aria-label={`Eliminar ${poi.nombre}`}
             >
@@ -154,7 +165,10 @@ export function PuntosInteresPanel({
             <button
               type="button"
               className={styles.btnMap}
-              onClick={() => { setShowForm(true); onStartPlacing(); }}
+              onClick={() => {
+                setShowForm(true);
+                onStartPlacing();
+              }}
             >
               ◆ Colocar en mapa
             </button>
