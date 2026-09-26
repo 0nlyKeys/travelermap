@@ -40,8 +40,37 @@
     font-family: t.$font-body !important;
   }
 
+  /**
+   * Tile-provider attribution. Required by both CARTO's and Esri's terms, so it
+   * stays mounted — it is toned down to near-invisible and lifts on hover
+   * instead of being hidden. 4px of clearance keeps it off the progress bar.
+   */
   :global(.leaflet-control-attribution) {
-    display: none !important;
+    margin: 0 t.$space-1 t.$space-1 0 !important;
+    padding: 0 t.$space-1 !important;
+    background: transparent !important;
+    color: t.$text-secondary !important;
+    font-family: t.$font-mono !important;
+    font-size: t.$fs-label-xs !important;
+    line-height: 1.6 !important;
+    letter-spacing: t.$tracking-tight;
+    text-shadow: 0 1px 3px t.$surface-sunken;
+    opacity: 0.4;
+    transition: opacity t.$dur-fast t.$ease-out;
+
+    &:hover {
+      opacity: 0.85;
+    }
+
+    a {
+      color: inherit !important;
+      text-decoration: none !important;
+
+      &:hover {
+        color: t.$accent !important;
+        text-decoration: underline !important;
+      }
+    }
   }
 }
 
